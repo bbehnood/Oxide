@@ -9,7 +9,7 @@ impl<S: TextStorage> Buffer<S> {
         Self { storage }
     }
 
-    pub fn line(&self, index: usize) -> Option<String> {
+    pub fn line(&self, index: usize) -> Option<&str> {
         self.storage.line(index)
     }
 

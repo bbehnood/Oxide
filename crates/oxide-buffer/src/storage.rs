@@ -5,7 +5,7 @@ pub use vec::VecStorage;
 use crate::{Position, Range, Result};
 
 pub trait TextStorage {
-    fn line(&self, index: usize) -> Option<String>;
+    fn line(&self, index: usize) -> Option<&str>;
 
     fn line_count(&self) -> usize;
 
