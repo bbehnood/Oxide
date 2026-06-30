@@ -1,0 +1,15 @@
+[workspace]
+resolver = 3
+
+members = [
+	"crates/oxide",
+	"crates/oxide-core",
+	"crates/oxide-terminal",
+	"crates/oxide-buffer",
+]
+
+[workspace.dependencies]
+anyhow = "1"
+thiserror = "2"
+crossterm = "0.29"
+
