@@ -8,7 +8,8 @@ pub enum Command {
     InsertText(String),
 
     Backspace,
-    Delete(Position),
+    Delete,
+
     DeleteRange(Range),
 
     NewLine,

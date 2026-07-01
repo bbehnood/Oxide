@@ -1,4 +1,4 @@
-use oxide_buffer::{Position, Result, TextStorage};
+use oxide_buffer::{Position, Range, Result, TextStorage};
 
 use crate::{Command, Cursor, Document};
 
@@ -24,6 +24,55 @@ impl<S: TextStorage> Editor<S> {
         &mut self.document
     }
 
+    fn backspace(&mut self) -> Result<()> {
+        let pos = self.cursor.position();
+
+        if pos.line == 0 && pos.column == 0 {
+            return Ok(());
+        }
+
+        if pos.column > 0 {
+            let start = Position::new(pos.line, pos.column - 1);
+
+            self.document.delete(Range::new(start, pos))?;
+
+            self.cursor.set(start);
+
+            return Ok(());
+        }
+
+        let previous_line = pos.line - 1;
+
+        let previous_len =
+            self.document.buffer().line_len(previous_line).unwrap();
+
+        let start = Position::new(previous_line, previous_len);
+
+        self.document.delete(Range::new(start, pos))?;
+
+        self.cursor.set(start);
+
+        Ok(())
+    }
+
+    fn delete(&mut self) -> Result<()> {
+        let pos = self.cursor.position();
+
+        let buffer = self.document.buffer();
+
+        if buffer.is_last_line(pos.line) && buffer.is_last_column(pos) {
+            return Ok(());
+        }
+
+        let end = if buffer.is_last_column(pos) {
+            Position::new(pos.line + 1, 0)
+        } else {
+            Position::new(pos.line, pos.column + 1)
+        };
+
+        self.document.delete(Range::new(pos, end))
+    }
+
     pub fn execute(&mut self, command: Command) -> Result<()> {
         match command {
             Command::MoveTo(pos) => self.cursor.set(pos),
@@ -44,6 +93,10 @@ impl<S: TextStorage> Editor<S> {
                 // TODO: Improve cursor movement
             }
 
+            Command::Backspace => self.backspace()?,
+
+            Command::Delete => self.delete()?,
+
             Command::DeleteRange(range) => {
                 self.document.delete(range)?;
                 self.cursor.set(range.start);
@@ -56,8 +109,6 @@ impl<S: TextStorage> Editor<S> {
 
                 self.cursor.set(Position::new(pos.line + 1, 0));
             }
-
-            _ => {}
         }
 
         Ok(())
