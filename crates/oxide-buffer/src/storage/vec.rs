@@ -1,5 +1,3 @@
-use std::io::Lines;
-
 use crate::{BufferError, Position, Range, Result, TextStorage};
 
 pub struct VecStorage {
