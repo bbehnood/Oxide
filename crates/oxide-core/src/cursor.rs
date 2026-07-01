@@ -1,5 +1,6 @@
 use oxide_buffer::Position;
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Cursor {
     position: Position,
 }
