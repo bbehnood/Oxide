@@ -1,3 +1,5 @@
+use std::io::Lines;
+
 use crate::{BufferError, Position, Range, Result, TextStorage};
 
 pub struct VecStorage {
@@ -43,7 +45,9 @@ impl Default for VecStorage {
 }
 
 impl TextStorage for VecStorage {
-    fn line(&self, index: usize) -> Option<&str> {
+    type Line<'a> = &'a str;
+
+    fn line(&self, index: usize) -> Option<Self::Line<'_>> {
         self.lines.get(index).map(String::as_str)
     }
 

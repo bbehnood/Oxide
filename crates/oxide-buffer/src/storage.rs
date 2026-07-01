@@ -5,7 +5,11 @@ pub use vec::VecStorage;
 use crate::{Position, Range, Result};
 
 pub trait TextStorage {
-    fn line(&self, index: usize) -> Option<&str>;
+    type Line<'a>: AsRef<str>
+    where
+        Self: 'a;
+
+    fn line(&self, index: usize) -> Option<Self::Line<'_>>;
 
     fn line_count(&self) -> usize;
 
