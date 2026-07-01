@@ -28,4 +28,20 @@ impl<S: TextStorage> Buffer<S> {
     pub fn delete(&mut self, range: Range) -> Result<()> {
         self.storage.delete(range)
     }
+
+    pub fn line_len(&self, line: usize) -> Option<usize> {
+        self.line(line).map(|line| line.as_ref().chars().count())
+    }
+
+    pub fn is_last_line(&self, line: usize) -> bool {
+        line + 1 == self.line_count()
+    }
+
+    pub fn is_last_column(&self, pos: Position) -> bool {
+        self.line_len(pos.line).is_some_and(|len| pos.column == len)
+    }
+
+    pub fn is_valid_position(&self, pos: Position) -> bool {
+        self.line_len(pos.line).is_some_and(|len| pos.column <= len)
+    }
 }
