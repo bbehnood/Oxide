@@ -7,3 +7,4 @@ description = "Oxide core editor logic"
 
 [dependencies]
 oxide-buffer = { path = "../oxide-buffer" }
+thiserror.workspace = true
