@@ -44,4 +44,8 @@ impl<S: TextStorage> Buffer<S> {
     pub fn is_valid_position(&self, pos: Position) -> bool {
         self.line_len(pos.line).is_some_and(|len| pos.column <= len)
     }
+
+    pub fn to_text(&self) -> String {
+        self.storage.to_text()
+    }
 }

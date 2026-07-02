@@ -18,4 +18,6 @@ pub trait TextStorage {
     fn insert(&mut self, pos: Position, text: &str) -> Result<()>;
 
     fn delete(&mut self, range: Range) -> Result<()>;
+
+    fn to_text(&self) -> String;
 }

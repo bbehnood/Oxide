@@ -57,6 +57,10 @@ impl TextStorage for VecStorage {
         chars + self.lines.len().saturating_sub(1)
     }
 
+    fn to_text(&self) -> String {
+        self.lines.join("\n")
+    }
+
     fn insert(&mut self, pos: Position, text: &str) -> Result<()> {
         self.validate_position(pos)?;
 
@@ -159,6 +163,47 @@ mod tests {
 
         // 😀😁\n😂
         assert_eq!(storage.len_chars(), 4);
+    }
+
+    // ===== to_text =====
+
+    #[test]
+    fn to_text_single_line() {
+        let storage = storage(&["Hello"]);
+
+        assert_eq!(storage.to_text(), "Hello");
+    }
+
+    #[test]
+    fn to_text_multiple_lines() {
+        let storage = storage(&["one", "two", "three"]);
+
+        assert_eq!(storage.to_text(), "one\ntwo\nthree");
+    }
+
+    #[test]
+    fn to_text_empty_buffer() {
+        let storage = VecStorage::new();
+
+        assert_eq!(storage.to_text(), "");
+    }
+
+    #[test]
+    fn to_text_preserves_blank_lines() {
+        let storage = storage(&["a", "", "b"]);
+
+        assert_eq!(storage.to_text(), "a\n\nb");
+    }
+
+    #[test]
+    fn to_text_roundtrips_with_insert() {
+        let mut storage = storage(&[""]);
+
+        let original = "line one\nline two\nline three";
+
+        storage.insert(Position::new(0, 0), original).unwrap();
+
+        assert_eq!(storage.to_text(), original);
     }
 
     // ===== Insert =====
