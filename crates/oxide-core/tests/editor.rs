@@ -64,9 +64,7 @@ fn insert_text_single_line_advances_cursor_by_char_count() {
 fn insert_text_multiline_places_cursor_on_last_line() {
     let mut editor = editor_with("");
 
-    editor
-        .execute(Command::InsertText("one\ntwo\nthree".to_string()))
-        .unwrap();
+    editor.execute(Command::InsertText("one\ntwo\nthree".to_string())).unwrap();
 
     assert_eq!(editor.document().buffer().line_count(), 3);
     assert_eq!(line(&editor, 0), "one");
@@ -185,7 +183,8 @@ fn delete_range_removes_text_and_places_cursor_at_start() {
 }
 
 #[test]
-fn delete_range_with_reversed_bounds_still_places_cursor_at_earliest_position() {
+fn delete_range_with_reversed_bounds_still_places_cursor_at_earliest_position()
+{
     let mut editor = editor_with("Hello World");
 
     // Bounds given in reverse (end before start), as a selection dragged
