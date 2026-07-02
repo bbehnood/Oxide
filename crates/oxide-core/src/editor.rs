@@ -43,8 +43,11 @@ impl<S: TextStorage> Editor<S> {
 
         let previous_line = pos.line - 1;
 
-        let previous_len =
-            self.document.buffer().line_len(previous_line).unwrap();
+        let previous_len = self
+            .document
+            .buffer()
+            .line_len(previous_line)
+            .expect("previous line must exist");
 
         let start = Position::new(previous_line, previous_len);
 
